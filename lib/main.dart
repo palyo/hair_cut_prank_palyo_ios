@@ -52,9 +52,9 @@ class _LauncherState extends State<Launcher> {
 
   void _updateStatusBar(BuildContext context) {
     var isDarkMode = false;
-    final themeController = Get.find<MainController>();
+    final controller = Get.find<MainController>();
 
-    final selectedTheme = themeController.selectedTheme.value;
+    final selectedTheme = controller.selectedTheme.value;
     if (selectedTheme == "dark") {
       isDarkMode = true;
     } else if (selectedTheme == "system") {

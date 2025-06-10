@@ -12,6 +12,7 @@ import 'package:prankers/adModule/AdManager.dart';
 import 'package:prankers/extensions/app_colors.dart';
 import 'package:prankers/extensions/screen_size.dart';
 import 'package:prankers/languages/I10n/app_localizations.dart';
+import 'package:prankers/provider/LifecycleHandler.dart';
 import 'package:prankers/provider/MainController.dart';
 
 import '../extensions/app_text_styles.dart';
@@ -29,9 +30,11 @@ class ScreenPlayer extends StatefulWidget {
 
 class _ScreenPlayerState extends State<ScreenPlayer> {
   final controller = Get.find<MainController>();
+  final LifecycleHandler _lifecycleHandler = LifecycleHandler();
   bool isPlayAfter = false;
   bool isPlaying = false;
   bool isLooping = false;
+  bool isModified = false;
   int _selectedDelayInSeconds = 5;
   String sound = '';
 
@@ -47,16 +50,20 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
     super.initState();
     sound = getSound();
     _audioPlayer.onPlayerComplete.listen((event) {
-      if (!isLooping) {
+      if (!isLooping || isModified) {
+        isModified = false;
         setState(() {
           isPlaying = false;
         });
       }
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _lifecycleHandler.init(context);
+    });
   }
 
   Future<void> _loadAd() async {
-    if (controller.isPremium.value == false && AdManager.instance?.config?.isAdStatus == true) {
+    if (controller.isPremium.value == false && AdManager.instance?.config?.isAdStatus == true && AdManager.instance?.config?.isNativeAdStatus == true) {
       final adUnitId = AdManager.instance?.config?.banner ?? 'ca-app-pub-3940256099942544/8388050270';
       final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(MediaQuery.of(context).size.width.truncate());
 
@@ -113,6 +120,8 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
   void dispose() {
     _delayTimer?.cancel();
     _audioPlayer.dispose();
+    _adWidget = null;
+    _lifecycleHandler.dispose();
     super.dispose();
   }
 
@@ -200,7 +209,7 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                         padding: EdgeInsets.only(
                           bottom:
                               MediaQuery.of(context).padding.bottom +
-                              (controller.isPremium.value == false && AdManager.instance?.config?.isAdStatus == true ? (_isBannerAdReady ? bannerHeight.toDouble() : 65) : 0),
+                              (controller.isPremium.value == false && AdManager.instance?.config?.isAdStatus == true && AdManager.instance?.config?.isNativeAdStatus == true ? (_isBannerAdReady ? bannerHeight.toDouble() : 65) : 0),
                         ),
                         child: Column(
                           children: [
@@ -236,19 +245,20 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                                   Spacer(),
                                   Text(AppLocalizations.of(context)?.action_loop ?? '', style: AppTextStyles.bodyText1(context).copyWith(fontWeight: FontWeight.w600)),
                                   SizedBox(width: 6.sp),
-                                  StatefulBuilder(
-                                    builder: (context, state) {
-                                      return Switch(
-                                        value: isLooping,
-                                        activeColor: AppColors.categoryCard,
-                                        activeTrackColor: AppColors.categoryCard.withAlpha(50),
-                                        inactiveTrackColor: AppColors.card(context),
-                                        onChanged: (bool value) {
-                                          state(() {
-                                            isLooping = value;
-                                          });
-                                        },
-                                      );
+                                  Switch(
+                                    value: isLooping,
+                                    activeColor: AppColors.categoryCard,
+                                    activeTrackColor: AppColors.categoryCard.withAlpha(50),
+                                    inactiveTrackColor: AppColors.card(context),
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        isLooping = value;
+                                        isModified = true;
+                                      });
+
+                                      if(isPlaying){
+                                        _audioPlayer.setReleaseMode(isLooping ? ReleaseMode.loop : ReleaseMode.stop);
+                                      }
                                     },
                                   ),
                                 ],
@@ -267,7 +277,7 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
               ),
             ),
 
-            if (controller.isPremium.value == false && AdManager.instance?.config?.isAdStatus == true)
+            if (controller.isPremium.value == false && AdManager.instance?.config?.isAdStatus == true && AdManager.instance?.config?.isNativeAdStatus == true)
               if (_isBannerAdReady && _adWidget != null)
                 Positioned(
                   bottom: MediaQuery.of(context).padding.bottom,
