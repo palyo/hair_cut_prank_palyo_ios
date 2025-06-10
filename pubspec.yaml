@@ -1,0 +1,99 @@
+name: prankers
+description: "Prank sound"
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
+  flutter_svg: ^2.0.16
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.3.3
+  path_provider: ^2.1.5
+  get: ^4.6.6
+  get_storage: ^2.1.1
+  dio: ^5.7.0
+  url_launcher: ^6.2.3
+  flutter_screenutil: ^5.5.3
+  permission_handler: ^12.0.0+1
+  in_app_purchase: ^3.2.3
+  package_info_plus: ^8.3.0
+  audioplayers: ^6.4.0
+  flutter_sound: ^9.2.13
+  firebase_core: ^3.13.1
+  onesignal_flutter: ^5.3.3
+  google_mobile_ads: ^6.0.0
+  smooth_page_indicator: ^1.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+  generate: true
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/flag/
+    - assets/icons/
+    - assets/categories/
+    - assets/categories/air_horn/
+    - assets/categories/animals/
+    - assets/categories/bomb_sound/
+    - assets/categories/fart/
+    - assets/categories/gun/
+    - assets/categories/hair_clipper/
+    - assets/categories/hair_cut/
+    - assets/categories/horror_sound/
+    - assets/categories/police_siren/
+    - assets/categories/taser/
+    - assets/categories/full_vector/
+    - assets/categories/full_vector/air_horn/
+    - assets/categories/full_vector/animals/
+    - assets/categories/full_vector/bomb_sound/
+    - assets/categories/full_vector/fart/
+    - assets/categories/full_vector/gun/
+    - assets/categories/full_vector/hair_clipper/
+    - assets/categories/full_vector/hair_cut/
+    - assets/categories/full_vector/horror_sound/
+    - assets/categories/full_vector/police_siren/
+    - assets/categories/full_vector/taser/
+    - assets/sounds/
+    - assets/sounds/air_horn/
+    - assets/sounds/animals/
+    - assets/sounds/bomb_sound/
+    - assets/sounds/fart/
+    - assets/sounds/gun/
+    - assets/sounds/hair_clipper/
+    - assets/sounds/hair_cut/
+    - assets/sounds/horror_sound/
+    - assets/sounds/police_siren/
+    - assets/sounds/taser/
+    - assets/alert/
+  fonts:
+    - family: DM Sans
+      fonts:
+        - asset: fonts/black.ttf
+          weight: 900
+        - asset: fonts/extra_bold.ttf
+          weight: 800
+        - asset: fonts/bold.ttf
+          weight: 700
+        - asset: fonts/semi_bold.ttf
+          weight: 600
+        - asset: fonts/medium.ttf
+          weight: 500
+        - asset: fonts/regular.ttf
+          weight: 400
+

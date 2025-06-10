@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBNRd-6vh7Ps8i_gMArE6uI6Cask0R7Iq0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>464294744652</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ab.haircut.prank</string>
+	<key>PROJECT_ID</key>
+	<string>haircutprankapp</string>
+	<key>STORAGE_BUCKET</key>
+	<string>haircutprankapp.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:464294744652:ios:1dab31f9f9ef3b89b75ae9</string>
+</dict>
+</plist>
