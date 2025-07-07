@@ -6,14 +6,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MainController extends GetxController {
   final box = GetStorage();
   RxString selectedTheme = "light".obs;
-  RxString selectedLanguage = "".obs;
+  RxString selectedLanguage = "en".obs;
   RxBool isPremium = false.obs;
   Locale locale = Locale('en');
 
   @override
   void onInit() {
     selectedTheme.value = box.read("theme") ?? "light";
-    selectedLanguage.value = box.read("language") ?? "";
+    selectedLanguage.value = box.read("language") ?? "en";
     isPremium.value = box.read("isPremium") ?? false;
     changeLanguage(selectedLanguage.value);
     changeTheme(selectedTheme.value);

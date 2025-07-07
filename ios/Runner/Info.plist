@@ -33,6 +33,17 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>fetch</string>
+      <string>remote-notification</string>
+    </array>
+    <key>NSPushNotificationUsageDescription</key>
+    <string>This app uses notifications for alerts and updates.</string>
+    <key>NSUserTrackingUsageDescription</key>
+    <string>We’d like to offer you a more personalized experience by showing relevant content and ads based on your activity across apps and websites. Your data will be handled securely and in compliance with privacy laws.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app needs access to the microphone to detect claps.</string>
 	<key>SKAdNetworkItems</key>

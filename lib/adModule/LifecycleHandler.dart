@@ -1,0 +1,39 @@
+import 'package:flutter/material.dart';
+import 'package:prankers/adModule/AdManager.dart';
+import 'package:prankers/adModule/AdStateController.dart';
+import 'package:prankers/adModule/AppOpenAdManager.dart';
+
+class LifecycleHandler with WidgetsBindingObserver {
+  static final LifecycleHandler _instance = LifecycleHandler._internal();
+  factory LifecycleHandler() => _instance;
+  LifecycleHandler._internal();
+  BuildContext? _context;
+  bool _isAdShowing = false;
+  void init(BuildContext context) {
+    _context = context;
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && !_isAdShowing) {
+      _isAdShowing = true;
+      if (AdStateController.instance.isShowingInterstitial) {
+        return;
+      }
+      if (AdManager.instance?.config?.isAdStatus == false) {
+        return;
+      }
+      AppOpenAdManager().showAdIfAvailable(
+        _context!,
+        onFailed: (isFailed) {
+          _isAdShowing = false;
+        },
+      );
+    }
+  }
+}

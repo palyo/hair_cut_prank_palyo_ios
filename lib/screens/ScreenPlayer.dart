@@ -3,17 +3,20 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:prankers/adModule/AdManager.dart';
+import 'package:prankers/adModule/InterAd.dart';
 import 'package:prankers/extensions/app_colors.dart';
 import 'package:prankers/extensions/screen_size.dart';
 import 'package:prankers/languages/I10n/app_localizations.dart';
 import 'package:prankers/provider/LifecycleHandler.dart';
 import 'package:prankers/provider/MainController.dart';
+import 'package:prankers/screens/premium/ScreenPremium.dart';
 
 import '../extensions/app_text_styles.dart';
 import 'ScreenCategoryItem.dart';
@@ -31,6 +34,7 @@ class ScreenPlayer extends StatefulWidget {
 class _ScreenPlayerState extends State<ScreenPlayer> {
   final controller = Get.find<MainController>();
   final LifecycleHandler _lifecycleHandler = LifecycleHandler();
+  bool isRewarded = false;
   bool isPlayAfter = false;
   bool isPlaying = false;
   bool isLooping = false;
@@ -63,9 +67,13 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
   }
 
   Future<void> _loadAd() async {
-    if (controller.isPremium.value == false && AdManager.instance?.config?.isAdStatus == true && AdManager.instance?.config?.isNativeAdStatus == true) {
+    if (controller.isPremium.value == false &&
+        AdManager.instance?.config?.isAdStatus == true &&
+        AdManager.instance?.config?.isNativeAdStatus == true) {
       final adUnitId = AdManager.instance?.config?.banner ?? 'ca-app-pub-3940256099942544/8388050270';
-      final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(MediaQuery.of(context).size.width.truncate());
+      final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+        MediaQuery.of(context).size.width.truncate(),
+      );
 
       if (size == null) {
         debugPrint('Unable to get adaptive banner size.');
@@ -130,7 +138,7 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
     var loc = AppLocalizations.of(context);
     return Obx(() {
       return Scaffold(
-        backgroundColor: AppColors.background(context),
+        backgroundColor: colorBackground,
         body: Stack(
           children: [
             Image.asset('assets/ic_player_background.webp', width: context.screenWidth, fit: BoxFit.cover),
@@ -151,6 +159,19 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                         },
                         child: Image.asset('assets/icons/ic_navigation_back.webp', width: 56.sp, height: 56.sp, fit: BoxFit.contain),
                       ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          Get.off(ScreenPremium());
+                        },
+                        child: Image.asset(
+                          'assets/icons/ic_action_premium.webp',
+                          width: context.isTabletSize ? 100.sp : 56.sp,
+                          height: context.isTabletSize ? 100.sp : 56.sp,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      SizedBox(width: 16.sp),
                     ],
                   ),
                   Expanded(
@@ -163,13 +184,41 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                             if (isPlaying) {
                               _stopSound();
                             } else {
-                              if (isPlayAfter) {
-                                _delayTimer?.cancel();
-                                _delayTimer = Timer(Duration(seconds: _selectedDelayInSeconds), () {
+                              if (isRewarded) {
+                                if (isPlayAfter) {
+                                  _delayTimer?.cancel();
+                                  _delayTimer = Timer(Duration(seconds: _selectedDelayInSeconds), () {
+                                    _playSound();
+                                  });
+                                } else {
                                   _playSound();
-                                });
+                                }
                               } else {
-                                _playSound();
+                                InterAd().showRewardedInterstitialAd(
+                                  context,
+                                  () {
+                                    isRewarded = true;
+                                    if (isPlayAfter) {
+                                      _delayTimer?.cancel();
+                                      _delayTimer = Timer(Duration(seconds: _selectedDelayInSeconds), () {
+                                        _playSound();
+                                      });
+                                    } else {
+                                      _playSound();
+                                    }
+                                  },
+                                  () {
+                                    isRewarded = true;
+                                    if (isPlayAfter) {
+                                      _delayTimer?.cancel();
+                                      _delayTimer = Timer(Duration(seconds: _selectedDelayInSeconds), () {
+                                        _playSound();
+                                      });
+                                    } else {
+                                      _playSound();
+                                    }
+                                  },
+                                );
                               }
                             }
 
@@ -188,9 +237,24 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                                 right: 0,
                                 bottom: 4.sp,
                                 child: Center(
-                                  child: Text(
-                                    isPlaying ? loc?.action_stop ?? '' : loc?.action_play ?? '',
-                                    style: AppTextStyles.subheading1(context).copyWith(fontWeight: FontWeight.w600),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      if (controller.isPremium.value == false && AdManager.instance?.config?.isAdStatus == true) ...[
+                                        SvgPicture.asset(
+                                          'assets/icons/ic_action_crown.svg',
+                                          width: 24,
+                                          height: 24,
+                                          colorFilter: ColorFilter.mode(colorText, BlendMode.srcIn),
+                                        ),
+                                        SizedBox(width: 12.sp),
+                                      ],
+                                      Text(
+                                        isPlaying ? loc?.action_stop ?? '' : loc?.action_play ?? '',
+                                        style: AppTextStyles.of(context).headline5.copyWith(fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -204,12 +268,16 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                   ClipRRect(
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(12.sp), topRight: Radius.circular(12.sp)),
                     child: Container(
-                      color: AppColors.card(context),
+                      color: colorCard,
                       child: Padding(
                         padding: EdgeInsets.only(
                           bottom:
                               MediaQuery.of(context).padding.bottom +
-                              (controller.isPremium.value == false && AdManager.instance?.config?.isAdStatus == true && AdManager.instance?.config?.isNativeAdStatus == true ? (_isBannerAdReady ? bannerHeight.toDouble() : 65) : 0),
+                              (controller.isPremium.value == false &&
+                                      AdManager.instance?.config?.isAdStatus == true &&
+                                      AdManager.instance?.config?.isNativeAdStatus == true
+                                  ? (_isBannerAdReady ? bannerHeight.toDouble() : 65)
+                                  : 0),
                         ),
                         child: Column(
                           children: [
@@ -223,7 +291,7 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                                     },
                                     child: Text(
                                       AppLocalizations.of(context)?.action_play_after ?? '',
-                                      style: AppTextStyles.bodyText1(context).copyWith(fontWeight: FontWeight.w600),
+                                      style: AppTextStyles.of(context).bodyLarge.copyWith(fontWeight: FontWeight.w600),
                                     ),
                                   ),
                                   SizedBox(width: 6.sp),
@@ -231,9 +299,9 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                                     builder: (context, state) {
                                       return Switch(
                                         value: isPlayAfter,
-                                        activeColor: AppColors.categoryCard,
-                                        activeTrackColor: AppColors.categoryCard.withAlpha(50),
-                                        inactiveTrackColor: AppColors.card(context),
+                                        activeColor: categoryCard,
+                                        activeTrackColor: categoryCard.withAlpha(50),
+                                        inactiveTrackColor: colorCard,
                                         onChanged: (bool value) {
                                           state(() {
                                             isPlayAfter = value;
@@ -243,20 +311,23 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                                     },
                                   ),
                                   Spacer(),
-                                  Text(AppLocalizations.of(context)?.action_loop ?? '', style: AppTextStyles.bodyText1(context).copyWith(fontWeight: FontWeight.w600)),
+                                  Text(
+                                    AppLocalizations.of(context)?.action_loop ?? '',
+                                    style: AppTextStyles.of(context).bodyLarge.copyWith(fontWeight: FontWeight.w600),
+                                  ),
                                   SizedBox(width: 6.sp),
                                   Switch(
                                     value: isLooping,
-                                    activeColor: AppColors.categoryCard,
-                                    activeTrackColor: AppColors.categoryCard.withAlpha(50),
-                                    inactiveTrackColor: AppColors.card(context),
+                                    activeColor: categoryCard,
+                                    activeTrackColor: categoryCard.withAlpha(50),
+                                    inactiveTrackColor: colorCard,
                                     onChanged: (bool value) {
                                       setState(() {
                                         isLooping = value;
                                         isModified = true;
                                       });
 
-                                      if(isPlaying){
+                                      if (isPlaying) {
                                         _audioPlayer.setReleaseMode(isLooping ? ReleaseMode.loop : ReleaseMode.stop);
                                       }
                                     },
@@ -277,7 +348,9 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
               ),
             ),
 
-            if (controller.isPremium.value == false && AdManager.instance?.config?.isAdStatus == true && AdManager.instance?.config?.isNativeAdStatus == true)
+            if (controller.isPremium.value == false &&
+                AdManager.instance?.config?.isAdStatus == true &&
+                AdManager.instance?.config?.isNativeAdStatus == true)
               if (_isBannerAdReady && _adWidget != null)
                 Positioned(
                   bottom: MediaQuery.of(context).padding.bottom,
@@ -290,7 +363,7 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                   bottom: MediaQuery.of(context).padding.bottom,
                   left: 0,
                   right: 0,
-                  child: Container(height: 65, color: AppColors.card(context)),
+                  child: Container(height: 65, color: colorCard),
                 ),
           ],
         ),
@@ -306,7 +379,7 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24.sp),
         child: Container(
-          color: AppColors.categoryCard,
+          color: categoryCard,
           child: Stack(
             children: [
               Image.asset('assets/categories/ic_category_bg.webp'),
@@ -321,7 +394,7 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
                       child: Padding(
                         padding: EdgeInsets.only(top: 12.sp),
                         child: Center(
-                          child: Text(title, style: AppTextStyles.accentButtonText(context), textAlign: TextAlign.center),
+                          child: Text(title, style: AppTextStyles.of(context).accentButton, textAlign: TextAlign.center),
                         ),
                       ),
                     ),
@@ -336,7 +409,9 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
   }
 
   void goto(String category) {
-    Get.off(ScreenCategoryItem(category: category, isPlayer: true));
+    InterAd().showAd(context, () {
+      Get.off(ScreenCategoryItem(category: category, isPlayer: true));
+    });
   }
 
   Widget _buildCategoryList() {
@@ -374,7 +449,7 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
-      backgroundColor: AppColors.card(context),
+      backgroundColor: colorCard,
       builder: (_) {
         final List<int> delayOptions = [5, 10, 15, 30, 60];
         return Padding(
@@ -385,19 +460,19 @@ class _ScreenPlayerState extends State<ScreenPlayer> {
               Container(
                 width: 40,
                 height: 4,
-                decoration: BoxDecoration(color: AppColors.text(context).withAlpha(40), borderRadius: BorderRadius.circular(2)),
+                decoration: BoxDecoration(color: colorText.withAlpha(40), borderRadius: BorderRadius.circular(2)),
               ),
               SizedBox(height: 4.sp),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 4.sp),
-                child: Text('Select Delay Time', style: AppTextStyles.subheading1(context)),
+                child: Text('Select Delay Time', style: AppTextStyles.of(context).headline3),
               ),
               ...delayOptions.map((seconds) {
                 final label = seconds < 60 ? '$seconds seconds' : '${seconds ~/ 60} minute';
                 return ListTile(
                   dense: true,
                   contentPadding: EdgeInsets.symmetric(horizontal: 16.sp, vertical: 2.sp),
-                  title: Text(label, style: AppTextStyles.bodyText1(context)),
+                  title: Text(label, style: AppTextStyles.of(context).headline5),
                   onTap: () {
                     _selectedDelayInSeconds = seconds;
                     Navigator.pop(context);

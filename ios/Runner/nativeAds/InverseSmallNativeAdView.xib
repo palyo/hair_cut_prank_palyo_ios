@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment version="2048" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -39,19 +39,19 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Body that is really really long and can take up to two lines or sometimes even more." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PEQ-D9-2Vv">
-                    <rect key="frame" x="73" y="88.5" width="288" height="26.5"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                    <rect key="frame" x="73" y="94.5" width="288" height="24"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Headline" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beR-eV-DX1">
-                    <rect key="frame" x="97" y="71" width="264" height="12"/>
+                    <rect key="frame" x="97" y="71" width="264" height="19.5"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                     <color key="textColor" systemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ad" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lp1-oz-XOs">
-                    <rect key="frame" x="73" y="69.5" width="15" height="15"/>
+                    <rect key="frame" x="73" y="73.5" width="15" height="15"/>
                     <color key="backgroundColor" systemColor="systemBlueColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="15" id="Bcm-eI-HQU"/>
@@ -69,15 +69,14 @@
             </subviews>
             <color key="backgroundColor" systemColor="systemGray6Color"/>
             <constraints>
+                <constraint firstItem="E5w-YA-UY8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="1nF-fZ-7oX"/>
+                <constraint firstItem="iNa-bH-h1m" firstAttribute="top" secondItem="E5w-YA-UY8" secondAttribute="bottom" constant="8" id="5sR-Bt-ZF8"/>
                 <constraint firstAttribute="trailing" secondItem="PEQ-D9-2Vv" secondAttribute="trailing" constant="8" id="8U0-Fb-3R7"/>
-                <constraint firstItem="lp1-oz-XOs" firstAttribute="centerY" secondItem="beR-eV-DX1" secondAttribute="centerY" id="AiZ-xs-gYx"/>
+                <constraint firstItem="lp1-oz-XOs" firstAttribute="centerY" secondItem="beR-eV-DX1" secondAttribute="centerY" id="8v9-u2-Hrx"/>
                 <constraint firstAttribute="trailing" secondItem="E5w-YA-UY8" secondAttribute="trailing" constant="8" id="Gnd-Vz-KPA"/>
-                <constraint firstItem="PEQ-D9-2Vv" firstAttribute="top" secondItem="lp1-oz-XOs" secondAttribute="bottom" constant="4" id="I08-55-XC0"/>
                 <constraint firstItem="E5w-YA-UY8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="KPL-hL-WJ9"/>
-                <constraint firstItem="iNa-bH-h1m" firstAttribute="top" secondItem="E5w-YA-UY8" secondAttribute="bottom" constant="8" id="T6q-BE-Tgp"/>
-                <constraint firstItem="PEQ-D9-2Vv" firstAttribute="top" secondItem="beR-eV-DX1" secondAttribute="bottom" constant="5.5" id="Xer-zR-WvE"/>
-                <constraint firstItem="E5w-YA-UY8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="dGv-zo-z3x"/>
-                <constraint firstItem="beR-eV-DX1" firstAttribute="top" secondItem="E5w-YA-UY8" secondAttribute="bottom" constant="8" id="hEi-vK-LSy"/>
+                <constraint firstItem="PEQ-D9-2Vv" firstAttribute="top" secondItem="beR-eV-DX1" secondAttribute="bottom" constant="4" id="Xer-zR-WvE"/>
+                <constraint firstItem="beR-eV-DX1" firstAttribute="top" secondItem="E5w-YA-UY8" secondAttribute="bottom" constant="8" id="fbc-vF-jZe"/>
                 <constraint firstItem="iNa-bH-h1m" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="ijU-zM-kKs"/>
                 <constraint firstAttribute="trailing" secondItem="beR-eV-DX1" secondAttribute="trailing" constant="8" id="nnB-bb-9WD"/>
                 <constraint firstItem="beR-eV-DX1" firstAttribute="leading" secondItem="lp1-oz-XOs" secondAttribute="trailing" constant="9" id="wa4-1D-mnc"/>
@@ -91,7 +90,7 @@
                 <outlet property="headlineView" destination="beR-eV-DX1" id="d1E-ed-yel"/>
                 <outlet property="iconView" destination="iNa-bH-h1m" id="gIe-xy-iwm"/>
             </connections>
-            <point key="canvasLocation" x="47.200000000000003" y="-405.69715142428788"/>
+            <point key="canvasLocation" x="47.200000000000003" y="-393.10344827586209"/>
         </view>
     </objects>
     <resources>

@@ -17,7 +17,7 @@ AppBar buildAppBar(
     elevation: 0,
     centerTitle: false,
     forceMaterialTransparency: true,
-    backgroundColor: AppColors.primary(context),
+    backgroundColor: colorPrimary,
     leading:
         isBack
             ? Padding(
@@ -27,9 +27,9 @@ AppBar buildAppBar(
                 icon: Icon(
                   icon ?? Icons.arrow_back_rounded,
                   size: 28.sp,
-                  color: AppColors.text(context),
+                  color: colorText,
                 ),
-                color: AppColors.text(context),
+                color: colorText,
               ),
             )
             : null,
@@ -37,7 +37,7 @@ AppBar buildAppBar(
         text != null
             ? Text(
               text ?? '',
-              style: AppTextStyles.subheading2(context).copyWith(fontWeight: FontWeight.w600),
+              style: AppTextStyles.of(context).headline4.copyWith(fontWeight: FontWeight.w600),
             )
             : const SizedBox.shrink(),
     actions: actions,

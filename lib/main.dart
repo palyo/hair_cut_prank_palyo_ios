@@ -9,35 +9,18 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:prankers/extensions/app_colors.dart';
 import 'package:prankers/extensions/screen_size.dart';
 import 'package:prankers/languages/I10n/app_localizations.dart';
 import 'package:prankers/provider/MainController.dart';
 import 'package:prankers/screens/ScreenSplash.dart';
-import 'package:prankers/screens/premium/PremiumManager.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put(MainController());
-  MobileAds.instance.initialize();
-  await PremiumManager.instance.checkIfPremiumUser();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   await GetStorage.init();
-  initOneSignal();
   runApp(const Launcher());
-}
-
-void initOneSignal() async {
-  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-  OneSignal.initialize("6fccd530-f9ab-417c-a0ad-e36c9eb6a5a6");
-
-  OneSignal.Notifications.requestPermission(true);
 }
 
 class Launcher extends StatefulWidget {
@@ -65,7 +48,7 @@ class _LauncherState extends State<Launcher> {
     }
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: AppColors.background(context),
+        statusBarColor: colorBackground,
         statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
         systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
         systemNavigationBarDividerColor: Colors.transparent,
@@ -96,15 +79,15 @@ class _LauncherState extends State<Launcher> {
           supportedLocales: [Locale('en'), Locale('de'), Locale('fr'), Locale('ar'), Locale('ja'), Locale('es'), Locale('in'), Locale('af'), Locale('pt')],
           theme: ThemeData(
             brightness: Brightness.dark,
-            scaffoldBackgroundColor: AppColors.background(context),
-            canvasColor: AppColors.background(context),
-            cardColor: AppColors.card(context),
-            primaryColor: AppColors.primary(context),
+            scaffoldBackgroundColor: colorBackground,
+            canvasColor: colorBackground,
+            cardColor: colorCard,
+            primaryColor: colorPrimary,
             fontFamily: 'DM Sans',
             useMaterial3: true,
             appBarTheme: AppBarTheme(
-              backgroundColor: AppColors.background(context),
-              foregroundColor: AppColors.text(context),
+              backgroundColor: colorBackground,
+              foregroundColor: colorText,
               toolbarHeight: 56.0,
               elevation: 0,
               centerTitle: false,
@@ -113,15 +96,15 @@ class _LauncherState extends State<Launcher> {
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
-            scaffoldBackgroundColor: AppColors.background(context),
-            canvasColor: AppColors.background(context),
-            cardColor: AppColors.card(context),
-            primaryColor: AppColors.primary(context),
+            scaffoldBackgroundColor: colorBackground,
+            canvasColor: colorBackground,
+            cardColor: colorCard,
+            primaryColor: colorPrimary,
             fontFamily: 'DM Sans',
             useMaterial3: true,
             appBarTheme: AppBarTheme(
-              backgroundColor: AppColors.background(context),
-              foregroundColor: AppColors.text(context),
+              backgroundColor: colorBackground,
+              foregroundColor: colorText,
               centerTitle: false,
               titleTextStyle: TextStyle(fontFamily: 'DM Sans', fontSize: 16.sp, fontWeight: FontWeight.bold),
             ),
